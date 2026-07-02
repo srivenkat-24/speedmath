@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Numberwork — CAT Quant Drill</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #10152a;
+    --bg-panel: #171e39;
+    --bg-panel-2: #1d2547;
+    --grid-line: rgba(236,231,216,0.07);
+    --paper: #ece7d8;
+    --paper-dim: #a9a48f;
+    --gold: #d9a93b;
+    --gold-dim: #9b7a2c;
+    --rust: #c1553a;
+    --teal: #3e8f86;
+    --radius: 10px;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background:
+      linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0/ 100% 42px,
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0/ 42px 100%,
+      var(--bg);
+    color: var(--paper);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    padding: 28px 18px 70px;
+  }
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+
+  .wrap{ max-width: 920px; margin: 0 auto; }
+
+  header{ margin-bottom: 26px; }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--gold); margin: 0 0 6px;
+  }
+  h1{ font-size: 34px; font-weight: 700; margin: 0 0 6px; letter-spacing: -0.01em; }
+  header p.sub{ color: var(--paper-dim); margin: 0; font-size: 14.5px; max-width: 58ch; line-height:1.5; }
+
+  nav.tabs{
+    display:flex; gap: 6px; margin: 26px 0 20px;
+    border-bottom: 1px solid rgba(236,231,216,0.14);
+  }
+  nav.tabs button{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px;
+    background:none; border:none; color: var(--paper-dim);
+    padding: 10px 4px; margin-right: 22px; cursor:pointer;
+    border-bottom: 2px solid transparent; letter-spacing:.01em;
+  }
+  nav.tabs button.active{ color: var(--paper); border-bottom-color: var(--gold); }
+
+  .chiprow{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom: 20px; }
+  .chip{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    background: var(--bg-panel); border: 1px solid rgba(236,231,216,0.14);
+    color: var(--paper-dim); padding: 8px 13px; border-radius: 999px;
+    cursor:pointer; transition: .15s; letter-spacing:.02em;
+  }
+  .chip:hover{ color: var(--paper); border-color: rgba(236,231,216,0.3); }
+  .chip.active{ background: var(--gold); color: #241a04; border-color: var(--gold); font-weight:600; }
+
+  .panel{
+    background: var(--bg-panel); border: 1px solid rgba(236,231,216,0.1);
+    border-radius: var(--radius); padding: 22px;
+  }
+
+  /* ---------- LEARN ---------- */
+  .learn-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:8px;}
+  .learn-head h2{ margin:0; font-size:19px; }
+  .learn-head .count{ font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--paper-dim); }
+
+  .table-picker{ display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .table-picker button{
+    width:32px; height:32px; border-radius:8px; border:1px solid rgba(236,231,216,0.18);
+    background: var(--bg-panel-2); color: var(--paper); cursor:pointer; font-size:16px;
+  }
+  .table-picker select{
+    font-family:'JetBrains Mono',monospace; font-size:14px; background:var(--bg-panel-2);
+    color:var(--paper); border:1px solid rgba(236,231,216,0.18); border-radius:8px; padding:6px 10px;
+  }
+
+  .row-grid{ display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; }
+  .row-grid .cell{
+    background: var(--bg-panel-2); border-radius:8px; padding:10px 8px; text-align:center;
+    border: 1px solid rgba(236,231,216,0.06);
+  }
+  .row-grid .cell .k{ font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--paper-dim); }
+  .row-grid .cell .v{ font-family:'JetBrains Mono',monospace; font-size:17px; font-weight:600; margin-top:2px; }
+
+  .card-grid{ display:grid; grid-template-columns: repeat(6, 1fr); gap:8px; }
+  .card-grid .cell{
+    background: var(--bg-panel-2); border-radius:8px; padding:9px 6px; text-align:center;
+    border: 1px solid rgba(236,231,216,0.06);
+  }
+  .card-grid .cell .k{ font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--paper-dim); }
+  .card-grid .cell .v{ font-family:'JetBrains Mono',monospace; font-size:15px; font-weight:600; margin-top:2px; }
+
+  .recip-group{ margin-bottom:14px; }
+  .recip-group .denom{ font-family:'JetBrains Mono',monospace; font-size:12px; color: var(--teal); margin-bottom:6px; letter-spacing:.05em;}
+  .recip-chips{ display:flex; flex-wrap:wrap; gap:7px; }
+  .recip-chip{
+    font-family:'JetBrains Mono',monospace; font-size:12.5px;
+    background: var(--bg-panel-2); border:1px solid rgba(236,231,216,0.08);
+    padding: 6px 10px; border-radius:7px;
+  }
+  .recip-chip b{ color: var(--gold); font-weight:600; }
+
+  .notes{
+    margin-top:20px; padding-top:16px; border-top: 1px dashed rgba(236,231,216,0.16);
+  }
+  .notes h3{ font-size:13px; text-transform:uppercase; letter-spacing:.12em; color:var(--gold); margin:0 0 10px;}
+  .notes ul{ margin:0; padding-left:18px; color: var(--paper-dim); font-size:14px; line-height:1.7; }
+  .notes li strong{ color: var(--paper); }
+
+  /* ---------- PRACTICE ---------- */
+  .stats-bar{ display:flex; gap:10px; margin-bottom:18px; flex-wrap:wrap; }
+  .stat{
+    flex:1; min-width:100px; background: var(--bg-panel); border:1px solid rgba(236,231,216,0.1);
+    border-radius: var(--radius); padding: 12px 16px;
+  }
+  .stat .num{ font-family:'JetBrains Mono',monospace; font-size:22px; font-weight:700; }
+  .stat .lab{ font-size:11px; color:var(--paper-dim); text-transform:uppercase; letter-spacing:.1em; margin-top:2px;}
+  .stat.streak .num{ color: var(--gold); }
+  .stat.acc .num{ color: var(--teal); }
+
+  .quiz-card{ text-align:center; padding: 40px 24px; }
+  .quiz-topic{ font-family:'JetBrains Mono',monospace; font-size:12px; color: var(--gold); letter-spacing:.14em; text-transform:uppercase; margin-bottom:14px; }
+  .quiz-prompt{ font-family:'JetBrains Mono',monospace; font-size:38px; font-weight:700; margin-bottom:22px; letter-spacing:.01em; word-break:break-word;}
+  .quiz-input-row{ display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+  .quiz-input-row input{
+    font-family:'JetBrains Mono',monospace; font-size:20px; text-align:center;
+    background: var(--bg-panel-2); border:1px solid rgba(236,231,216,0.2); border-radius:8px;
+    color: var(--paper); padding: 10px 14px; width: 160px;
+  }
+  .quiz-input-row input:focus{ outline:none; border-color: var(--gold); }
+  .btn{
+    font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:15px;
+    border:none; border-radius:8px; padding: 11px 20px; cursor:pointer;
+  }
+  .btn-primary{ background: var(--gold); color:#241a04; }
+  .btn-ghost{ background: var(--bg-panel-2); color: var(--paper-dim); border:1px solid rgba(236,231,216,0.15); }
+  .btn-primary:hover{ filter:brightness(1.08); }
+
+  .feedback{ margin-top: 18px; font-size:15px; min-height: 24px; font-weight:600;}
+  .feedback.correct{ color: var(--teal); }
+  .feedback.wrong{ color: var(--rust); }
+
+  .history{ display:flex; gap:6px; justify-content:center; margin-top:22px; flex-wrap:wrap; }
+  .history span{
+    width:10px; height:10px; border-radius:50%; display:inline-block;
+    background: rgba(236,231,216,0.15);
+  }
+  .history span.ok{ background: var(--teal); }
+  .history span.bad{ background: var(--rust); }
+
+  .start-msg{ text-align:center; color: var(--paper-dim); padding: 50px 20px; font-size:14.5px; }
+  .start-msg .btn{ margin-top:16px; }
+
+  .table-select-wrap{ padding: 6px 2px; }
+  .table-select-hint{ color: var(--paper-dim); font-size: 14px; margin: 0 0 14px; }
+  .table-select-actions{ display:flex; gap:8px; margin-bottom:14px; }
+  .table-select-actions .btn{ padding: 7px 14px; font-size: 13px; }
+  .table-select-grid{
+    display:grid; grid-template-columns: repeat(10, 1fr); gap:7px;
+  }
+  .table-toggle{
+    text-align:center; padding: 9px 4px; font-size:13px; border-radius:8px;
+  }
+  .change-tables{
+    color: var(--teal); cursor:pointer; text-decoration: underline; text-decoration-style: dotted;
+    text-transform: none; letter-spacing: 0;
+  }
+
+  footer{ text-align:center; color: var(--paper-dim); font-size:12px; margin-top: 40px; font-family:'JetBrains Mono',monospace;}
+
+  @media (max-width:640px){
+    .row-grid{ grid-template-columns: repeat(3,1fr); }
+    .card-grid{ grid-template-columns: repeat(3,1fr); }
+    .quiz-prompt{ font-size:28px; }
+    .table-select-grid{ grid-template-columns: repeat(6,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <p class="eyebrow">Numberwork · CAT Quant Drill</p>
+    <h1>Get these cold.</h1>
+    <p class="sub">Tables, squares, cubes, powers, and reciprocal percentages — the raw material every CAT quant and DI question is built on. Learn them once, drill them daily, stop doing long division on exam day.</p>
+  </header>
+
+  <nav class="tabs">
+    <button id="tab-learn" class="active" onclick="switchTab('learn')">Learn</button>
+    <button id="tab-practice" onclick="switchTab('practice')">Practice</button>
+  </nav>
+
+  <!-- ============ LEARN ============ -->
+  <section id="learn">
+    <div class="chiprow" id="learn-chips"></div>
+    <div class="panel" id="learn-content"></div>
+  </section>
+
+  <!-- ============ PRACTICE ============ -->
+  <section id="practice" style="display:none;">
+    <div class="chiprow" id="practice-chips"></div>
+
+    <div class="stats-bar">
+      <div class="stat streak"><div class="num" id="stat-streak">0</div><div class="lab">Streak</div></div>
+      <div class="stat"><div class="num" id="stat-total">0</div><div class="lab">Attempted</div></div>
+      <div class="stat acc"><div class="num" id="stat-acc">—</div><div class="lab">Accuracy</div></div>
+    </div>
+
+    <div class="panel">
+      <div id="practice-body"></div>
+    </div>
+  </section>
+
+  <footer>session-only progress for now · more topics &amp; persistent tracking coming next</footer>
+</div>
+
+<script>
+/* ============================================================
+   DATA GENERATION
+   ============================================================ */
+function gcd(a,b){ return b===0 ? a : gcd(b, a%b); }
+
+const TOPICS = {
+  tables:   { label: "Tables (1–30)",     color: "gold" },
+  squares:  { label: "Squares (1–30)",    color: "gold" },
+  cubes:    { label: "Cubes (1–15)",      color: "gold" },
+  pow2:     { label: "Powers of 2 (1–12)",color: "gold" },
+  pow3:     { label: "Powers of 3 (1–12)",color: "gold" },
+  pow5:     { label: "Powers of 5 (1–5)", color: "gold" },
+  pow7:     { label: "Powers of 7 (1–4)", color: "gold" },
+  recip:    { label: "Reciprocals & %",   color: "gold" },
+};
+
+const DATA = {};
+
+DATA.squares = []; for(let n=1;n<=30;n++) DATA.squares.push({n, v:n*n});
+DATA.cubes   = []; for(let n=1;n<=15;n++) DATA.cubes.push({n, v:n*n*n});
+DATA.pow2    = []; for(let n=1;n<=12;n++) DATA.pow2.push({n, v:Math.pow(2,n)});
+DATA.pow3    = []; for(let n=1;n<=12;n++) DATA.pow3.push({n, v:Math.pow(3,n)});
+DATA.pow5    = []; for(let n=1;n<=5;n++)  DATA.pow5.push({n, v:Math.pow(5,n)});
+DATA.pow7    = []; for(let n=1;n<=4;n++)  DATA.pow7.push({n, v:Math.pow(7,n)});
+
+DATA.tables = {}; // n -> [ {m, v} ] for n 1..30, m 1..10
+for(let n=1;n<=30;n++){
+  DATA.tables[n] = [];
+  for(let m=1;m<=10;m++) DATA.tables[n].push({m, v:n*m});
+}
+
+DATA.recip = []; // { k, n, pct (2dp), label }
+for(let n=2;n<=16;n++){
+  for(let k=1;k<n;k++){
+    if(gcd(k,n)===1){
+      const pct = Math.round((k/n*100)*100)/100;
+      DATA.recip.push({k, n, pct});
+    }
+  }
+}
+
+/* ============================================================
+   LEARN SECTION
+   ============================================================ */
+const learnChips = document.getElementById('learn-chips');
+const learnContent = document.getElementById('learn-content');
+let currentLearnTopic = 'tables';
+let tablePickerN = 1;
+
+Object.keys(TOPICS).forEach(key=>{
+  const c = document.createElement('div');
+  c.className = 'chip' + (key===currentLearnTopic ? ' active' : '');
+  c.textContent = TOPICS[key].label;
+  c.onclick = ()=>{ currentLearnTopic = key; renderLearnChips(); renderLearn(); };
+  c.dataset.key = key;
+  learnChips.appendChild(c);
+});
+
+function renderLearnChips(){
+  [...learnChips.children].forEach(c=>{
+    c.classList.toggle('active', c.dataset.key === currentLearnTopic);
+  });
+}
+
+const NOTES = {
+  tables: [
+    "Up to 20, just know them cold. For 21–30, break the number apart: 23×7 = (20×7) + (3×7) = 140+21 = 161.",
+    "Squares are hiding inside your tables — n×n is always the diagonal of the grid.",
+    "Test yourself: say a full row (1 to 10) out loud fast. If you hesitate anywhere, that's the row to drill again."
+  ],
+  squares: [
+    "Squares only ever end in 0, 1, 4, 5, 6, or 9 — never 2, 3, 7, or 8. Quick way to rule out wrong answer options.",
+    "Each square is the last one plus an odd number: 21² = 20² + 41 (since 20²=400, so 21²=441). Handy if you blank on one but remember a nearby one.",
+    "To square a number near a round one: 29² = 30² − (2×30) + 1 = 900 − 60 + 1 = 841."
+  ],
+  cubes: [
+    "Cubes matter most for volume questions and finding cube roots fast — worth being instant on 1 to 15.",
+    "Fun check, not something to memorize: add up 1³+2³+3³+...+n³ and you always get a perfect square. Good way to catch a mistake.",
+    "Like squares, each cube's last digit follows a fixed pattern based on the original number — you'll start noticing it as you go."
+  ],
+  pow2: [
+    "2^10 = 1024. In your head, just round it to 1000 — good enough for fast estimates.",
+    "Shows up in probability (coin toss outcomes) and 'how many subsets' type questions.",
+    "Each power is just double the one before it — if you forget one, double the previous."
+  ],
+  pow3: [
+    "3^5 = 243 — this one comes up a lot, so it's worth knowing on its own.",
+    "Each power is 3 times the one before it — same trick as powers of 2, just triple instead of double.",
+    "They grow fast: 3^12 is over half a million. Good gut-check when an answer option looks way too small or too big."
+  ],
+  pow5: [
+    "Every single power of 5 ends in a 5.",
+    "Handy shortcut: a power of 5 times the same power of 2 always gives that power of 10. So knowing one helps you get the other.",
+    "These come up a lot in 'how many zeros at the end' type questions."
+  ],
+  pow7: [
+    "7^4 = 2401 — just remember it as 'about 2400'.",
+    "Each power is 7 times the one before — same logic as powers of 2 and 3, just times 7.",
+    "Least common of the four power families here, but still worth knowing solidly for divisibility and remainder questions."
+  ],
+  recip: [
+    "This is the most useful section here — fast fraction-to-percentage conversion speeds up almost every DI and percentage question.",
+    "Only learn 1/n for each n (2 through 16). Everything else is just a multiple of that: if 1/7 = 14.29%, then 3/7 = 3 × 14.29% = 42.86%.",
+    "Fractions like 2/4 or 4/8 aren't listed separately — they're really just 1/2 wearing a disguise, so there's no new value to learn."
+  ]
+};
+
+function renderLearn(){
+  const t = currentLearnTopic;
+  let html = '';
+
+  if(t === 'tables'){
+    html += `<div class="learn-head"><h2>Tables</h2><div class="count">1 – 30</div></div>`;
+    html += `<div class="table-picker">
+      <button onclick="stepTable(-1)">−</button>
+      <select id="table-select" onchange="tablePickerN=parseInt(this.value); renderLearn();"></select>
+      <button onclick="stepTable(1)">+</button>
+    </div>`;
+    html += `<div class="row-grid">`;
+    DATA.tables[tablePickerN].forEach(({m,v})=>{
+      html += `<div class="cell"><div class="k">${tablePickerN} × ${m}</div><div class="v">${v}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(t === 'squares'){
+    html += `<div class="learn-head"><h2>Squares</h2><div class="count">1² – 30²</div></div>`;
+    html += `<div class="card-grid">`;
+    DATA.squares.forEach(({n,v})=>{
+      html += `<div class="cell"><div class="k">${n}²</div><div class="v">${v}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(t === 'cubes'){
+    html += `<div class="learn-head"><h2>Cubes</h2><div class="count">1³ – 15³</div></div>`;
+    html += `<div class="card-grid">`;
+    DATA.cubes.forEach(({n,v})=>{
+      html += `<div class="cell"><div class="k">${n}³</div><div class="v">${v}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(t === 'pow2' || t==='pow3' || t==='pow5' || t==='pow7'){
+    const base = {pow2:2, pow3:3, pow5:5, pow7:7}[t];
+    const maxN = {pow2:12, pow3:12, pow5:5, pow7:4}[t];
+    html += `<div class="learn-head"><h2>Powers of ${base}</h2><div class="count">${base}¹ – ${base}${sup(maxN)}</div></div>`;
+    html += `<div class="card-grid">`;
+    DATA[t].forEach(({n,v})=>{
+      html += `<div class="cell"><div class="k">${base}${sup(n)}</div><div class="v">${v.toLocaleString()}</div></div>`;
+    });
+    html += `</div>`;
+  }
+
+  if(t === 'recip'){
+    html += `<div class="learn-head"><h2>Reciprocals &amp; multiples</h2><div class="count">1/2 – 15/16</div></div>`;
+    for(let n=2;n<=16;n++){
+      const items = DATA.recip.filter(r=>r.n===n);
+      html += `<div class="recip-group"><div class="denom">/${n}</div><div class="recip-chips">`;
+      items.forEach(({k,n,pct})=>{
+        html += `<div class="recip-chip">${k}/${n} = <b>${pct}%</b></div>`;
+      });
+      html += `</div></div>`;
+    }
+  }
+
+  html += `<div class="notes"><h3>Worth remembering</h3><ul>`;
+  NOTES[t].forEach(n=> html += `<li>${n}</li>`);
+  html += `</ul></div>`;
+
+  learnContent.innerHTML = html;
+
+  if(t==='tables'){
+    const sel = document.getElementById('table-select');
+    sel.innerHTML = '';
+    for(let n=1;n<=30;n++){
+      const o = document.createElement('option');
+      o.value = n; o.textContent = 'Table of ' + n;
+      if(n===tablePickerN) o.selected = true;
+      sel.appendChild(o);
+    }
+  }
+}
+function stepTable(d){
+  tablePickerN = Math.min(30, Math.max(1, tablePickerN + d));
+  renderLearn();
+}
+function sup(n){
+  const map = {0:'⁰',1:'¹',2:'²',3:'³',4:'⁴',5:'⁵',6:'⁶',7:'⁷',8:'⁸',9:'⁹'};
+  return String(n).split('').map(d=>map[d]).join('');
+}
+
+/* ============================================================
+   PRACTICE SECTION
+   ============================================================ */
+const practiceChips = document.getElementById('practice-chips');
+const practiceBody = document.getElementById('practice-body');
+let practiceTopic = null; // null until user picks; 'mixed' or a topic key
+let session = { streak:0, total:0, correct:0 };
+let current = null; // {topic, prompt, answer, tolerance}
+let lastTopic = null;
+let lastPromptKey = null;
+let sessionActive = false;
+let selectedTables = new Set(); // which tables (1-30) to drill when practicing "tables" alone
+
+const PRACTICE_KEYS = ['mixed', ...Object.keys(TOPICS)];
+PRACTICE_KEYS.forEach(key=>{
+  const c = document.createElement('div');
+  c.className = 'chip';
+  c.textContent = key==='mixed' ? 'Mixed (recommended)' : TOPICS[key].label;
+  c.dataset.key = key;
+  c.onclick = ()=>{ startPractice(key); };
+  practiceChips.appendChild(c);
+});
+
+function startPractice(key){
+  practiceTopic = key;
+  [...practiceChips.children].forEach(c=> c.classList.toggle('active', c.dataset.key===key));
+  session = { streak:0, total:0, correct:0 };
+  lastTopic = null; lastPromptKey = null;
+  historyLog = [];
+  updateStats();
+  if(key === 'tables'){
+    sessionActive = false;
+    renderTableSelect();
+  } else {
+    sessionActive = true;
+    nextQuestion();
+  }
+}
+
+function renderTableSelect(){
+  sessionActive = false;
+  let html = `<div class="table-select-wrap">
+    <p class="table-select-hint">Pick one or more tables to drill. Pick several and questions will mix across just those.</p>
+    <div class="table-select-actions">
+      <button class="btn btn-ghost" onclick="selectAllTables()">Select all</button>
+      <button class="btn btn-ghost" onclick="clearAllTables()">Clear</button>
+    </div>
+    <div class="table-select-grid">`;
+  for(let n=1;n<=30;n++){
+    html += `<div class="chip table-toggle ${selectedTables.has(n)?'active':''}" onclick="toggleTable(${n})">${n}</div>`;
+  }
+  html += `</div>
+    <button class="btn btn-primary" style="margin-top:18px;" onclick="beginTablesPractice()" ${selectedTables.size===0?'disabled':''}>
+      Practice ${selectedTables.size ? selectedTables.size + ' table' + (selectedTables.size>1?'s':'') : 'selected tables'}
+    </button>
+  </div>`;
+  practiceBody.innerHTML = html;
+}
+
+function toggleTable(n){
+  if(selectedTables.has(n)) selectedTables.delete(n); else selectedTables.add(n);
+  renderTableSelect();
+}
+function selectAllTables(){ for(let n=1;n<=30;n++) selectedTables.add(n); renderTableSelect(); }
+function clearAllTables(){ selectedTables.clear(); renderTableSelect(); }
+
+function beginTablesPractice(){
+  if(selectedTables.size===0) return;
+  sessionActive = true;
+  nextQuestion();
+}
+
+function pickTopicForQuestion(){
+  if(practiceTopic !== 'mixed') return practiceTopic;
+  const keys = Object.keys(TOPICS);
+  let t;
+  do { t = keys[Math.floor(Math.random()*keys.length)]; } while(t === lastTopic && keys.length>1);
+  return t;
+}
+
+function buildQuestion(topic){
+  let prompt, answer, tolerance = 0, promptKey;
+
+  if(topic === 'tables'){
+    const pool = (practiceTopic === 'tables' && selectedTables.size>0) ? [...selectedTables] : Array.from({length:30}, (_,i)=>i+1);
+    let n, m;
+    do{
+      n = pool[Math.floor(Math.random()*pool.length)];
+      m = 1 + Math.floor(Math.random()*10);
+      promptKey = n+'x'+m;
+    } while(promptKey === lastPromptKey && pool.length*10 > 1);
+    prompt = `${n} × ${m}`;
+    answer = n*m;
+  }
+  else if(topic === 'squares'){
+    let row;
+    do{ row = DATA.squares[Math.floor(Math.random()*DATA.squares.length)]; }
+    while(('sq'+row.n) === lastPromptKey);
+    promptKey = 'sq'+row.n;
+    prompt = `${row.n}²`;
+    answer = row.v;
+  }
+  else if(topic === 'cubes'){
+    let row;
+    do{ row = DATA.cubes[Math.floor(Math.random()*DATA.cubes.length)]; }
+    while(('cb'+row.n) === lastPromptKey);
+    promptKey = 'cb'+row.n;
+    prompt = `${row.n}³`;
+    answer = row.v;
+  }
+  else if(['pow2','pow3','pow5','pow7'].includes(topic)){
+    const base = {pow2:2, pow3:3, pow5:5, pow7:7}[topic];
+    let row;
+    do{ row = DATA[topic][Math.floor(Math.random()*DATA[topic].length)]; }
+    while((topic+row.n) === lastPromptKey);
+    promptKey = topic+row.n;
+    prompt = `${base}${sup(row.n)}`;
+    answer = row.v;
+  }
+  else if(topic === 'recip'){
+    let row;
+    do{ row = DATA.recip[Math.floor(Math.random()*DATA.recip.length)]; }
+    while(('rc'+row.k+'-'+row.n) === lastPromptKey);
+    promptKey = 'rc'+row.k+'-'+row.n;
+    prompt = `${row.k}/${row.n} as a %`;
+    answer = row.pct;
+    tolerance = 0.06; // allow rounding slack, e.g. 14.28 vs 14.29
+  }
+
+  return { topic, prompt, answer, tolerance, promptKey };
+}
+
+function nextQuestion(){
+  answered = false;
+  const topic = pickTopicForQuestion();
+  lastTopic = topic;
+  current = buildQuestion(topic);
+  lastPromptKey = current.promptKey;
+
+  practiceBody.innerHTML = `
+    <div class="quiz-card">
+      <div class="quiz-topic">${TOPICS[current.topic].label}${practiceTopic==='tables' ? ` · <span class="change-tables" onclick="renderTableSelect()">change tables</span>` : ''}</div>
+      <div class="quiz-prompt mono">${current.prompt} = ?</div>
+      <div class="quiz-input-row">
+        <input type="number" step="any" id="answer-input" autofocus placeholder="type your answer" autocomplete="off" />
+        <button class="btn btn-ghost" onclick="skipQuestion()">Skip</button>
+        <button class="btn btn-ghost" onclick="endSession()">Done</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="history" id="history"></div>
+    </div>
+  `;
+  renderHistory();
+  const input = document.getElementById('answer-input');
+  input.addEventListener('input', ()=> checkAnswer(false));
+  input.addEventListener('keydown', e=>{ if(e.key==='Enter') checkAnswer(true); });
+  input.focus();
+}
+
+let historyLog = [];
+
+let answered = false;
+
+function checkAnswer(forceCheck){
+  if(answered) return;
+  const input = document.getElementById('answer-input');
+  const raw = input.value.trim();
+  if(raw === ''){ return; }
+  const val = parseFloat(raw);
+  if(isNaN(val)) return;
+
+  const tol = current.tolerance || 0.0001;
+  const ok = Math.abs(val - current.answer) <= tol;
+
+  // While the user is still typing (not Enter), only act on a correct match.
+  // A wrong-looking partial answer (e.g. "16" on the way to "161") shouldn't be judged yet.
+  if(!ok && !forceCheck) return;
+
+  finishQuestion(ok, input);
+}
+
+function finishQuestion(ok, input){
+  answered = true;
+  const fb = document.getElementById('feedback');
+  session.total++;
+  if(ok){
+    session.streak++; session.correct++;
+    fb.textContent = 'Correct.';
+    fb.className = 'feedback correct';
+  } else {
+    session.streak = 0;
+    fb.textContent = `Not quite — answer is ${current.answer}${current.topic==='recip' ? '%' : ''}.`;
+    fb.className = 'feedback wrong';
+  }
+  historyLog.push(ok);
+  if(historyLog.length>12) historyLog.shift();
+  updateStats();
+  renderHistory();
+  input.disabled = true;
+  setTimeout(()=>{ if(sessionActive) nextQuestion(); }, ok ? 450 : 1300);
+}
+
+function skipQuestion(){ nextQuestion(); }
+
+function endSession(){
+  sessionActive = false;
+  practiceTopic = null;
+  [...practiceChips.children].forEach(c=> c.classList.remove('active'));
+  const acc = session.total ? Math.round(session.correct/session.total*100) : null;
+  practiceBody.innerHTML = `
+    <div class="start-msg">
+      Session done — ${session.correct}/${session.total} correct${acc!==null ? ' ('+acc+'%)' : ''}.
+      <br>Pick a topic above to go again, or start mixed practice.
+      <br><button class="btn btn-primary" onclick="startPractice('mixed')">Start mixed practice</button>
+    </div>
+  `;
+}
+
+function renderHistory(){
+  const h = document.getElementById('history');
+  if(!h) return;
+  h.innerHTML = historyLog.map(ok=>`<span class="${ok?'ok':'bad'}"></span>`).join('');
+}
+
+function updateStats(){
+  document.getElementById('stat-streak').textContent = session.streak;
+  document.getElementById('stat-total').textContent = session.total;
+  document.getElementById('stat-acc').textContent = session.total ? Math.round(session.correct/session.total*100)+'%' : '—';
+}
+
+practiceBody.innerHTML = `
+  <div class="start-msg">
+    Pick a topic above to start. <strong>Mixed</strong> pulls from everything and never repeats the same topic twice in a row.
+    <br><button class="btn btn-primary" onclick="startPractice('mixed')">Start mixed practice</button>
+  </div>
+`;
+
+/* ============================================================
+   TABS
+   ============================================================ */
+function switchTab(name){
+  document.getElementById('learn').style.display = name==='learn' ? 'block' : 'none';
+  document.getElementById('practice').style.display = name==='practice' ? 'block' : 'none';
+  document.getElementById('tab-learn').classList.toggle('active', name==='learn');
+  document.getElementById('tab-practice').classList.toggle('active', name==='practice');
+}
+
+renderLearn();
+</script>
+</body>
+</html>
